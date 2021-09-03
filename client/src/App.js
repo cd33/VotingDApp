@@ -35,6 +35,8 @@ class App extends Component {
 
       const ownerCheck = accounts[0] === await instance.methods.owner().call();
 
+      web3.eth.handleRevert = true;
+
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance, ownerCheck }, this.getVoteStatus);
@@ -94,8 +96,10 @@ class App extends Component {
 
   getProposalById = async() => {
     try {
-      this.setState({ proposal: await this.state.contract.methods.proposals(this.proposalIdInput.value).call() });
+      let result = await this.state.contract.methods.proposals(this.proposalIdInput.value).call();
+      this.setState({ proposal: result });
     } catch (error) {
+      console.log(error)
       this.setState({ proposalErr: error.message });
     }
   }
@@ -104,6 +108,7 @@ class App extends Component {
     try {
       this.setState({ addr: await this.state.contract.methods.voters(this.addressInput.value).call() });
     } catch (error) {
+      console.log(error)
       this.setState({ addrErr: error.message });
     }
   }
@@ -226,9 +231,6 @@ class App extends Component {
       renounceOwnership 
     } = this.state;
 
-    console.log(this.state.transferOwnership)
-    console.log(this.state.renounceOwnership)
-
     if (!web3) 
       return (
         <div className="App"style={{marginTop: 50}}>
@@ -236,6 +238,7 @@ class App extends Component {
           <h3>Loading Web3, accounts, and contract...</h3>
         </div>
       )
+
     return (
       <div className="App">
         <div style={{textAlign: "center"}}>

@@ -90,7 +90,7 @@ contract Voting is Ownable {
         voters[msg.sender].proposalsCount ++;
         proposals.push(Proposal(_description, 0));
         
-        emit ProposalRegistered(proposals.length);
+        emit ProposalRegistered(proposals.length-1);
     }
     
     /** @dev The administrator closes the proposal registration session.
@@ -117,12 +117,14 @@ contract Voting is Ownable {
      *  @param proposalId Number of the voter's preferred proposal.
      *  ER3 : You're not allowed to vote.
      *  ER8 : You have already voted.
-     *  ER9 : The voting session has to be started.
+     *  ER9 : Non-existent proposal.
+     *  ER10 : The voting session has to be started.
      */
     function vote(uint proposalId) external {
         require(voters[msg.sender].isRegistered, "ER3");
         require(!voters[msg.sender].hasVoted, "ER8");
-        require(voteStatus == WorkflowStatus.VotingSessionStarted, "ER9");
+        require(proposalId <= proposals.length - 1, "ER9");
+        require(voteStatus == WorkflowStatus.VotingSessionStarted, "ER10");
         
         voters[msg.sender].hasVoted = true;
         voters[msg.sender].votedProposalId = proposalId;
@@ -137,20 +139,20 @@ contract Voting is Ownable {
     }
     
     /** @dev The administrator ends the voting session.
-     *  ER9 : The voting session has to be started.
+     *  ER10 : The voting session has to be started.
      */
     function votingSessionEnd() external onlyOwner {
-        require(voteStatus == WorkflowStatus.VotingSessionStarted, "ER9");
+        require(voteStatus == WorkflowStatus.VotingSessionStarted, "ER10");
         voteStatus = WorkflowStatus.VotingSessionEnded;
         emit VotingSessionEnded();
         emit WorkflowStatusChange(WorkflowStatus.VotingSessionStarted , WorkflowStatus.VotingSessionEnded);
     }
     
     /** @dev The administrator counts the votes.
-     *  ER10 : The voting session has to be ended.
+     *  ER11 : The voting session has to be ended.
      */
     function votesTally() external onlyOwner {
-        require(voteStatus == WorkflowStatus.VotingSessionEnded, "ER10");
+        require(voteStatus == WorkflowStatus.VotingSessionEnded, "ER11");
         uint _count;
         uint _tempWinner;
         for (uint i = 0; i < proposals.length; i++) {

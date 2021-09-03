@@ -22385,12 +22385,12 @@
     "1337": {
       "events": {},
       "links": {},
-      "address": "0x1E32C647234FE221C2F711BD6D39d20EF416b711",
-      "transactionHash": "0xa71fdfbca9e080baa272586046838854a572edb8fed2b76f9e987df83bac692b"
+      "address": "0x1Ccb443a45BBd7fD50107850a0Cca37E27eAc671",
+      "transactionHash": "0x406e70c932f39885b368061cbea72252090b625af5e0444e2de2f57e76cbd37d"
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-09-02T19:25:41.758Z",
+  "updatedAt": "2021-09-03T12:57:02.270Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

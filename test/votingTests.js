@@ -10,8 +10,8 @@ contract('Voting', accounts => {
     const proposal1 = "Prop 1";
     const proposal2 = "Prop 2";
     const proposal3 = "Prop 3";
-    const choice1 = new BN(0);
-    const choice2 = new BN(1);
+    const vote1 = new BN(0);
+    const vote2 = new BN(1);
     const RegisteringVoters = new BN(0);
     const ProposalsRegistrationStarted = new BN(1);
     const ProposalsRegistrationEnded = new BN(2);
@@ -69,14 +69,12 @@ contract('Voting', accounts => {
             });
 
             it("EVENT: ProposalsRegistrationStarted", async function() {
-                expectEvent(await this.VotingInstance.proposalsRegistrationStart({from:owner}),
-                "ProposalsRegistrationStarted");
+                expectEvent(await this.VotingInstance.proposalsRegistrationStart({from:owner}), "ProposalsRegistrationStarted");
             });
 
             it("EVENT: WorkflowStatusChange", async function() {
                 expectEvent(await this.VotingInstance.proposalsRegistrationStart({from:owner}),
-                "WorkflowStatusChange",
-                {previousStatus: new BN(0), newStatus: new BN(1)});
+                "WorkflowStatusChange", {previousStatus: new BN(0), newStatus: new BN(1)});
             });
 
             it("REVERT: ER1: The vote has already started.", async function() {
@@ -152,8 +150,7 @@ contract('Voting', accounts => {
             });
 
             it("EVENT: ProposalsRegistrationEnded", async function() {
-                expectEvent(await this.VotingInstance.proposalsRegistrationEnd({from:owner}),
-                "ProposalsRegistrationEnded");
+                expectEvent(await this.VotingInstance.proposalsRegistrationEnd({from:owner}), "ProposalsRegistrationEnded");
             });
 
             it("REVERT: ER6 : Registration has to be started", async function() {
@@ -180,8 +177,7 @@ contract('Voting', accounts => {
 
             it("EVENT: VotingSessionStarted", async function() {
                 await this.VotingInstance.proposalsRegistrationEnd({from:owner});
-                expectEvent(await this.VotingInstance.votingSessionStart({from:owner}),
-                "VotingSessionStarted");
+                expectEvent(await this.VotingInstance.votingSessionStart({from:owner}), "VotingSessionStarted");
             });
 
             it("REVERT: ER7 : Registration has to be ended.", async function() {
@@ -203,30 +199,29 @@ contract('Voting', accounts => {
             });
 
             it("REVERT: ER3 : You're not allowed to vote.", async function() {
-                await expectRevert(this.VotingInstance.vote(choice1, {from:owner}), "ER3");
+                await expectRevert(this.VotingInstance.vote(vote1, {from:owner}), "ER3");
             });
 
             it("Voters vote", async function() {
-                await this.VotingInstance.vote(choice1, {from:voter1});
-                await this.VotingInstance.vote(choice1, {from:voter2});
-                await this.VotingInstance.vote(choice2, {from:voter3});
+                await this.VotingInstance.vote(vote1, {from:voter1});
+                await this.VotingInstance.vote(vote1, {from:voter2});
+                await this.VotingInstance.vote(vote2, {from:voter3});
                 const v1 = await this.VotingInstance.voters(voter1)
                 const v2 = await this.VotingInstance.voters(voter2)
                 const v3 = await this.VotingInstance.voters(voter3)
-                expect(v1.votedProposalId).to.be.bignumber.equal(choice1);
-                expect(v2.votedProposalId).to.be.bignumber.equal(choice1);
-                expect(v3.votedProposalId).to.be.bignumber.equal(choice2);
+                expect(v1.votedProposalId).to.be.bignumber.equal(vote1);
+                expect(v2.votedProposalId).to.be.bignumber.equal(vote1);
+                expect(v3.votedProposalId).to.be.bignumber.equal(vote2);
             });
 
             it("EVENT: Voted", async function() {
-                expectEvent(await this.VotingInstance.vote(choice1, {from:voter1}),
-                "Voted",
-                {voter: voter1, proposalId: new BN(0)});
+                expectEvent(await this.VotingInstance.vote(vote1, {from:voter1}),
+                "Voted", {voter: voter1, proposalId: new BN(0)});
             });
 
             it("REVERT: ER8 : You have already voted.", async function() {
-                await this.VotingInstance.vote(choice1, {from:voter1});
-                await expectRevert(this.VotingInstance.vote(choice2, {from:voter1}), "ER8");
+                await this.VotingInstance.vote(vote1, {from:voter1});
+                await expectRevert(this.VotingInstance.vote(vote2, {from:voter1}), "ER8");
             });
 
             it("REVERT: ER9 : Non-existent proposal.", async function() {
@@ -246,9 +241,9 @@ contract('Voting', accounts => {
                 await this.VotingInstance.proposalsRegistration(proposal3, {from:voter3});
                 await this.VotingInstance.proposalsRegistrationEnd({from:owner});
                 await this.VotingInstance.votingSessionStart({from:owner});
-                await this.VotingInstance.vote(choice1, {from:voter1});
-                await this.VotingInstance.vote(choice2, {from:voter2});
-                await this.VotingInstance.vote(choice2, {from:voter3});
+                await this.VotingInstance.vote(vote1, {from:voter1});
+                await this.VotingInstance.vote(vote2, {from:voter2});
+                await this.VotingInstance.vote(vote2, {from:voter3});
             });
 
             it("REVERT: votingSessionEnd() is onlyOwner", async function() {
@@ -267,15 +262,49 @@ contract('Voting', accounts => {
 
             it("REVERT: ER10 : The voting session has to be started.", async function() {
                 await this.VotingInstance.votingSessionEnd({from:owner});
-                await expectRevert(this.VotingInstance.vote(choice1, {from:owner}), "ER10");
+                await expectRevert(this.VotingInstance.vote(vote1, {from:owner}), "ER10");
             });
             
             it("REVERT: ER10 : The voting session has to be started.", async function() {
                 await this.VotingInstance.votingSessionEnd({from:owner});
                 await expectRevert(this.VotingInstance.votingSessionEnd({from:owner}), "ER10");
             });
+
+            it("REVERT: ER11 : The voting session has to be ended.", async function() {
+                await expectRevert(this.VotingInstance.votesTally({from:owner}), "ER11");
+            });
         });
 
-        // To be continued ... ALMOST DONE !
+        describe("Winner", function() {
+            beforeEach(async function () {
+                await this.VotingInstance.addToWhitelist(voter1, {from:owner});
+                await this.VotingInstance.addToWhitelist(voter2, {from:owner});
+                await this.VotingInstance.addToWhitelist(voter3, {from:owner});
+                await this.VotingInstance.proposalsRegistrationStart({from:owner});
+                await this.VotingInstance.proposalsRegistration(proposal1, {from:voter1});
+                await this.VotingInstance.proposalsRegistration(proposal2, {from:voter2});
+                await this.VotingInstance.proposalsRegistration(proposal3, {from:voter3});
+                await this.VotingInstance.proposalsRegistrationEnd({from:owner});
+                await this.VotingInstance.votingSessionStart({from:owner});
+                await this.VotingInstance.vote(vote1, {from:voter1});
+                await this.VotingInstance.vote(vote2, {from:voter2});
+                await this.VotingInstance.vote(vote2, {from:voter3});
+                await this.VotingInstance.votingSessionEnd({from:owner});
+            });
+
+            it("REVERT: votesTally() is onlyOwner", async function() {
+                await expectRevert(this.VotingInstance.votesTally({from:voter1}),
+                "Ownable: caller is not the owner");
+            });
+
+            it("WinningProposalId Check", async function() {
+                await this.VotingInstance.votesTally({from:owner});
+                expect(await this.VotingInstance.winningProposalId()).to.be.bignumber.equal(vote2);
+            });
+
+            it("EVENT: VotesTallied", async function() {
+                expectEvent(await this.VotingInstance.votesTally({from:owner}), "VotesTallied");
+            });
+        });
     });
 });

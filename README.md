@@ -16,6 +16,8 @@
 
 <br>
 
+# VotingDApp
+
 * Registration of a blank list of voters.
 * The administrator of starts the proposal registration session.
 * Registered voters register their proposals.
@@ -29,5 +31,3 @@
 ### Possible improvements in a future version:
 - [ ] Manage reverts that crash the app.
 - [ ] Manage the case of a tie vote.
-
-Translated with www.DeepL.com/Translator (free version)

@@ -125,8 +125,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -150,8 +149,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -184,8 +182,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -219,8 +216,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -239,8 +235,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -253,8 +248,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -267,8 +261,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -293,8 +286,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -23209,16 +23201,15 @@
     "version": "0.8.0+commit.c7dfd78e.Emscripten.clang"
   },
   "networks": {
-    "1337": {
+    "3": {
       "events": {},
       "links": {},
-      "address": "0x50a022541f8530807Cec92D837594C0061DF8242",
-      "transactionHash": "0xd90b47bbaf7af6dfdd650ea6fc2e3b2ad36bb0b6a24a74a77f5be72a4e19b4b9"
+      "address": "0x099973809aFea59311992478824C861A98D111a2",
+      "transactionHash": "0x0e289d63c83e5cafa671613770bd0a8900f7ba0c42944a89a06b31c8b44c4cc8"
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-09-08T15:34:22.440Z",
-  "networkType": "ethereum",
+  "updatedAt": "2021-09-10T07:43:05.336Z",
   "devdoc": {
     "kind": "dev",
     "methods": {
